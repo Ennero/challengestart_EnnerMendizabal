@@ -1,9 +1,16 @@
 package storage
 
 import (
+	"encoding/json" 
+	"log"           
+	"os"            
 	"sync"
-	"backend/models"
+
+	"backend/models" 
 )
+
+// Constante con el nmobre del archivo de almacenamiento de mocks
+const mocksFileName = "config/mocks.json"
 
 // Variables globales para almacenar las configuraciones de mocks
 var (
@@ -11,16 +18,60 @@ var (
 	mutex             	sync.RWMutex
 )
 
+// InitMockStorage inicializa el almacenamiento y carga las configuraciones existentes desde el archivo.
 func InitMockStorage() {
-	// Inicializar el almacenamiento si es necesario
-	// Aquí podrías cargar configuraciones desde un archivo o base de datos
+	mutex.Lock()
+	defer mutex.Unlock()
+
+	// Intenta leer el archivo de mocks
+	data, err := os.ReadFile(mocksFileName)
+	if err != nil {
+		if os.IsNotExist(err) {
+			log.Printf("Archivo de mocks '%s' no encontrado. Iniciando con almacenamiento vacío.", mocksFileName)
+			return // El archivo no existe, no hay nada que cargar
+		}
+		log.Printf("Error al leer el archivo de mocks '%s': %v", mocksFileName, err)
+		return // Otro error de lectura
+	}
+
+	// Si el archivo existe y se leyó, intenta deserializar el JSON
+	if err := json.Unmarshal(data, &mockConfigurations); err != nil {
+		log.Printf("Error al deserializar mocks desde '%s': %v. Iniciando con almacenamiento vacío.", mocksFileName, err)
+
+		// Si hay un error de deserialización, puedes optar por reiniciar el almacenamiento
+		mockConfigurations = make(map[string]models.MockConfig)
+	} else {
+		log.Printf("Mocks cargados exitosamente desde '%s'. Total: %d", mocksFileName, len(mockConfigurations))
+	}
 }
+
+
+// saveMocksToFile guarda las configuraciones de mocks en el archivo JSON.
+// Esta función no debe ser pública y siempre debe ser llamada con el mutex bloqueado.
+func saveMocksToFile() {
+	// Serializa el mapa de configuraciones a JSON
+	data, err := json.MarshalIndent(mockConfigurations, "", "  ") // MarshalIndent para JSON legible
+	if err != nil {
+		log.Printf("Error al serializar mocks a JSON: %v", err)
+		return
+	}
+
+	// Escribe el JSON al archivo
+	if err := os.WriteFile(mocksFileName, data, 0644); err != nil { // Para Go 1.16+, puedes usar os.WriteFile
+		log.Printf("Error al escribir mocks en el archivo '%s': %v", mocksFileName, err)
+	}
+}
+
+
+
+
 
 // AddMockConfig agrega una nueva configuración de mock al almacenamiento.
 func AddMockConfig(config models.MockConfig){
 	mutex.Lock()
 	defer mutex.Unlock()
 	mockConfigurations[config.Id] = config
+	saveMocksToFile() // Guarda las configuraciones en el archivo después de agregar
 }
 
 // GetMockConfigByID obtiene una configuración de mock por su ID.
@@ -42,13 +93,14 @@ func GetAllMockConfigurations() []models.MockConfig {
 	return configs
 }
 
-// DeleteMockConfig elimina una configuración de mock por su ID.
+// DeleteMockConfig elimina una configuración de mock por su ID y la guarda.
 func DeleteMockConfig(id string) bool {
 	mutex.Lock()
 	defer mutex.Unlock()
 	_, exists := mockConfigurations[id]
 	if exists {
 		delete(mockConfigurations, id)
+		saveMocksToFile() // Guarda después de eliminar
 		return true
 	}
 	return false

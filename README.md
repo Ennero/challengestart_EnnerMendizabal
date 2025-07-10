@@ -87,7 +87,7 @@ Este programa se encargará de proporcionar una API para la simulación de servi
     ```bash
     git clone https://github.com/Ennero/challengestart_EnnerMendizabal.git 
     
-    cd go-mock-api/backend
+    cd mock-api/backend
     ```
 2.  **Descargar dependencias:**
     ```bash
@@ -97,8 +97,18 @@ Este programa se encargará de proporcionar una API para la simulación de servi
     ```bash
     go run main.go
     ```
-La API se ejecutará en `http://localhost:3000`.
+La API se ejecutará en `http://localhost:3000` de forma predeterminada, pero de la siguiente forma se puede inciar con otro puerto:
 
+```bash
+# Para linux o mac
+PORT=8080 go run backend/main.go
+
+# Para CMD de windows
+set PORT=8080 && go run backend/main.go
+
+# Para PowerShell de Windows
+$env:PORT="8080"; go run backend/main.go
+```
 
 
 ## Ejemplo de uso
