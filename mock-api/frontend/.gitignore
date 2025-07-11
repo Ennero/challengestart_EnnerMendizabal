@@ -7,24 +7,37 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-node_modules
-.DS_Store
-dist
-dist-ssr
-coverage
-*.local
+# Dependency directories
+node_modules/
+dist/
+dist-ssr/
+.vite/ # Cache de Vite
 
+# Editor directories and files
+.vscode/        # <-- Agrega esta línea para ignorar la configuración de VS Code
+.idea/          # Si usas WebStorm o IntelliJ
+*.sublime-project
+*.sublime-workspace
+.DS_Store       # Archivos de macOS
+Thumbs.db       # Archivos de Windows
+
+# Environment variables
+.env
+.env.*
+!.env.production # Generalmente se ignora todo .env, pero si tienes .env.production y lo quieres versionar, usa !.env.production
+.env.development.local # Ejemplo de archivos .local de entorno
+
+# Build artifacts
+# Estos ya los tienes, pero es bueno reiterarlos
+/dist/
+/build/
+
+# Testing
+/coverage/
 /cypress/videos/
 /cypress/screenshots/
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-*.tsbuildinfo
+# Misc
+*.swp
+*.bak
+*.swo
