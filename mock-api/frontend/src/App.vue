@@ -37,6 +37,7 @@ const addMock = async () => {
     // Asegúrate de que responseBody sea un objeto o array, no un string
     const bodyParsed = JSON.parse(newMock.value.responseBody);
 
+    // Validar el cuerpo de la respuesta
     const response = await fetch('http://localhost:3000/configure-mock', {
       method: 'POST',
       headers: {
@@ -51,13 +52,16 @@ const addMock = async () => {
       }),
     });
 
+    // Verificar si la respuesta es exitosa
     if (!response.ok) {
       const errorData = await response.json();
       throw new Error(`HTTP error! status: ${response.status} - ${errorData.error || response.statusText}`);
     }
 
+    // Procesar la respuesta exitosa
     const result = await response.json();
     showAlert(result.message, 'success');
+
     // Limpiar formulario y recargar mocks
     newMock.value = {
       path: '',
@@ -107,13 +111,13 @@ const showAlert = (message, type) => {
     `;
     document.querySelector('.alert-container').appendChild(alertDiv);
     
-    // Auto-remove alert after 5 seconds
+    // Quitar la alerta después de 3 segundos
     setTimeout(() => {
         alertDiv.remove();
-    }, 5000);
+    }, 3000);
 };
 
-// Función para obtener el color de badge según el método HTTP
+// Función para obtener el color según el método HTTP
 const getMethodBadgeClass = (method) => {
   const methodColors = {
     'GET': 'bg-success',
@@ -125,7 +129,7 @@ const getMethodBadgeClass = (method) => {
   return methodColors[method] || 'bg-secondary';
 };
 
-// Función para obtener el color de badge según el status code
+// Función para obtener el color según el status code
 const getStatusBadgeClass = (status) => {
   if (status >= 200 && status < 300) return 'bg-success';
   if (status >= 300 && status < 400) return 'bg-info';
@@ -168,6 +172,7 @@ onMounted(fetchMocks);
             <div class="card-body">
               <form @submit.prevent="addMock">
                 <div class="row g-3">
+                  
                   <!-- Path y Método en la misma fila -->
                   <div class="col-sm-8">
                     <label for="path" class="form-label fw-semibold">Path del Endpoint</label>
@@ -204,7 +209,7 @@ onMounted(fetchMocks);
                 </div>
 
                 <div class="row g-3 mt-2">
-                  <!-- Status Code y Content Type -->
+                  <!-- Código de estado y Content Type -->
                   <div class="col-sm-6">
                     <label for="statusCode" class="form-label fw-semibold">Código de Estado</label>
                     <div class="input-group">
@@ -243,6 +248,7 @@ onMounted(fetchMocks);
                 </div>
 
                 <div class="row g-3 mt-2">
+
                   <!-- Response Body -->
                   <div class="col-12">
                     <label for="responseBody" class="form-label fw-semibold">Response Body (JSON)</label>
@@ -286,6 +292,7 @@ onMounted(fetchMocks);
               </button>
             </div>
             <div class="card-body">
+              
               <!-- Loading -->
               <div v-if="loading" class="text-center py-5">
                 <div class="spinner-border text-primary" role="status">
@@ -365,7 +372,6 @@ onMounted(fetchMocks);
 </template>
 
 <style scoped>
-/* Estilos mínimos - usando principalmente Bootstrap */
 .card {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
@@ -374,6 +380,5 @@ onMounted(fetchMocks);
   transform: translateY(-2px);
 }
 
-/* Iconos de Bootstrap */
 @import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css');
 </style>
