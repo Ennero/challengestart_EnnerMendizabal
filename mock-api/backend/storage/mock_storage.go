@@ -47,18 +47,22 @@ func InitMockStorage() {
 
 
 // saveMocksToFile guarda las configuraciones de mocks en el archivo JSON
-func saveMocksToFile() {
+func saveMocksToFile() error {
 	// Serializa el mapa de configuraciones a JSON
 	data, err := json.MarshalIndent(mockConfigurations, "", "  ")
 	if err != nil {
 		log.Printf("Error al serializar mocks a JSON: %v", err)
-		return
+		return err
 	}
 
 	// Escribe el JSON al archivo
 	if err := os.WriteFile(mocksFileName, data, 0644); err != nil { 
 		log.Printf("Error al escribir mocks en el archivo '%s': %v", mocksFileName, err)
+		return err
 	}
+
+	log.Printf("Mocks guardados exitosamente en '%s'. Total: %d", mocksFileName, len(mockConfigurations))
+	return nil
 }
 
 
@@ -66,11 +70,18 @@ func saveMocksToFile() {
 
 
 // AddMockConfig agrega una nueva configuración de mock al almacenamiento.
-func AddMockConfig(config models.MockConfig){
+func AddMockConfig(config models.MockConfig) error {
 	mutex.Lock()
 	defer mutex.Unlock()
 	mockConfigurations[config.Id] = config
-	saveMocksToFile() // Guarda las configuraciones en el archivo después de agregar
+	err := saveMocksToFile() // Guarda las configuraciones en el archivo después de agregar
+
+	if err != nil {
+		log.Printf("Error al guardar la configuración del mock '%s': %v", config.Id, err)
+		return err
+	}
+
+	return nil
 }
 
 // GetMockConfigByID obtiene una configuración de mock por su ID.
