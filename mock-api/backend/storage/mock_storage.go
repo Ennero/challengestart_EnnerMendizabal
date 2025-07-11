@@ -36,9 +36,9 @@ func InitMockStorage() {
 
 	// Si el archivo existe y se leyó, intenta deserializar el JSON
 	if err := json.Unmarshal(data, &mockConfigurations); err != nil {
-		log.Printf("Error al deserializar mocks desde '%s': %v. Iniciando con almacenamiento vacío.", mocksFileName, err)
 
-		// Si hay un error de deserialización, puedes optar por reiniciar el almacenamiento
+		// Si hay un error de deserialización, loguea el error y comienza con un almacenamiento vacío
+		log.Printf("Error al deserializar mocks desde '%s': %v. Iniciando con almacenamiento vacío.", mocksFileName, err)
 		mockConfigurations = make(map[string]models.MockConfig)
 	} else {
 		log.Printf("Mocks cargados exitosamente desde '%s'. Total: %d", mocksFileName, len(mockConfigurations))
@@ -46,18 +46,17 @@ func InitMockStorage() {
 }
 
 
-// saveMocksToFile guarda las configuraciones de mocks en el archivo JSON.
-// Esta función no debe ser pública y siempre debe ser llamada con el mutex bloqueado.
+// saveMocksToFile guarda las configuraciones de mocks en el archivo JSON
 func saveMocksToFile() {
 	// Serializa el mapa de configuraciones a JSON
-	data, err := json.MarshalIndent(mockConfigurations, "", "  ") // MarshalIndent para JSON legible
+	data, err := json.MarshalIndent(mockConfigurations, "", "  ")
 	if err != nil {
 		log.Printf("Error al serializar mocks a JSON: %v", err)
 		return
 	}
 
 	// Escribe el JSON al archivo
-	if err := os.WriteFile(mocksFileName, data, 0644); err != nil { // Para Go 1.16+, puedes usar os.WriteFile
+	if err := os.WriteFile(mocksFileName, data, 0644); err != nil { 
 		log.Printf("Error al escribir mocks en el archivo '%s': %v", mocksFileName, err)
 	}
 }

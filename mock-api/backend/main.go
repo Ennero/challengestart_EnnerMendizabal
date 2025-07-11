@@ -23,14 +23,11 @@ func main() {
 	app.Use(logger.New())
 
 
-	// <--- ¡Añade el middleware CORS aquí!
+	// Middleware para CORS
     app.Use(cors.New(cors.Config{
-        AllowOrigins: "http://localhost:5173", // ¡Especifica el puerto de Vite!
+        AllowOrigins: "http://localhost:5173", 
         AllowHeaders: "Origin, Content-Type, Accept",
     }))
-    // En producción, esto debería ser el dominio real de tu frontend:
-    // AllowOrigins: "https://tu-dominio-frontend.com",
-
 
 	// Inicializar el almacenamiento de mocks
 	storage.InitMockStorage()
