@@ -10,6 +10,8 @@ import (
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/gofiber/fiber/v2/middleware/cors" 
+
 )
 
 
@@ -19,6 +21,16 @@ func main() {
 
 	// Middleware para logging de solicitudes
 	app.Use(logger.New())
+
+
+	// <--- ¡Añade el middleware CORS aquí!
+    app.Use(cors.New(cors.Config{
+        AllowOrigins: "http://localhost:5173", // ¡Especifica el puerto de Vite!
+        AllowHeaders: "Origin, Content-Type, Accept",
+    }))
+    // En producción, esto debería ser el dominio real de tu frontend:
+    // AllowOrigins: "https://tu-dominio-frontend.com",
+
 
 	// Inicializar el almacenamiento de mocks
 	storage.InitMockStorage()
