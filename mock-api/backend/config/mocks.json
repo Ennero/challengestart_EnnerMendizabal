@@ -1,0 +1,59 @@
+{
+  "046ec143-ab8f-423d-85bc-ad2147aeb39f": {
+    "id": "046ec143-ab8f-423d-85bc-ad2147aeb39f",
+    "path": "/auth-check",
+    "method": "GET",
+    "queryParams": {},
+    "bodyParams": {},
+    "headers": {
+      "Authorization": "Bearer token123"
+    },
+    "responseStatusCode": 200,
+    "responseBody": "Acceso Autorizado.",
+    "contentType": "text/plain"
+  },
+  "42dbb8e7-6443-411e-a577-4203e6f185bc": {
+    "id": "42dbb8e7-6443-411e-a577-4203e6f185bc",
+    "path": "/auth-check",
+    "method": "GET",
+    "queryParams": {},
+    "bodyParams": {},
+    "headers": {
+      "Authorization": "Bearer token123"
+    },
+    "responseStatusCode": 200,
+    "responseBody": "Acceso Autorizado.",
+    "contentType": "text/plain"
+  },
+  "6a84b9d5-74ef-45dd-a158-778363f873d7": {
+    "id": "6a84b9d5-74ef-45dd-a158-778363f873d7",
+    "path": "/greet",
+    "method": "GET",
+    "queryParams": {
+      "name": "Juan"
+    },
+    "bodyParams": {},
+    "headers": {},
+    "responseStatusCode": 200,
+    "responseBody": "{\"message\": \"Hola, {{.queryParams.name}}! Bienvenido de nuevo.\"}",
+    "contentType": "application/json",
+    "isTemplate": true
+  },
+  "724f3aea-2090-4b7a-8319-1a14708dd6dd": {
+    "id": "724f3aea-2090-4b7a-8319-1a14708dd6dd",
+    "path": "/users",
+    "method": "POST",
+    "queryParams": {},
+    "bodyParams": {
+      "username": "testuser"
+    },
+    "headers": {},
+    "responseStatusCode": 201,
+    "responseBody": {
+      "id": "user-123",
+      "status": "User created",
+      "username": "testuser"
+    },
+    "contentType": "application/json"
+  }
+}
