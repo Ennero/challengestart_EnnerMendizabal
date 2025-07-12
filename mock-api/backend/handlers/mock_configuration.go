@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	// "bytes"
 	"encoding/json"
 	"regexp"
 	"strings"
@@ -77,16 +76,14 @@ func ConfigureMock(c *fiber.Ctx) error {
 		config.Headers = make(map[string]string)
 	}
 
-
 	// Validación y asignación de Content-Type por defecto
 	validContentTypes := map[string]bool{
-		"application/json": true,
-		"text/plain":       true,
-		"text/html":        true, 
-		"application/xml":  true, 
+		"application/json":         true,
+		"text/plain":               true,
+		"text/html":                true,
+		"application/xml":          true,
 		"application/octet-stream": true, // Para archivos binarios
 	}
-
 
 	// Validación del ResponseBody
 	if config.ContentType == "" {
@@ -106,6 +103,7 @@ func ConfigureMock(c *fiber.Ctx) error {
 	// Validación del ResponseBody basado en Content-Type y IsTemplate
 	if !config.IsTemplate {
 		if config.ResponseBody == nil {
+
 			// Si no hay ResponseBody y Content-Type es JSON, asignar un objeto JSON vacío
 			if config.ContentType == "application/json" {
 				config.ResponseBody = map[string]interface{}{}
@@ -119,15 +117,19 @@ func ConfigureMock(c *fiber.Ctx) error {
 			if err != nil {
 				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "El 'responseBody' no pudo ser serializado a JSON.", "details": err.Error()})
 			}
+
+			// Intentar deserializar para validar que sea un JSON válido
 			var temp interface{}
 			if err := json.Unmarshal(rbBytes, &temp); err != nil {
 				return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "El 'responseBody' no es un JSON válido o la estructura no coincide con 'application/json'.", "details": err.Error()})
 			}
 			config.ResponseBody = temp // Asegurar que ResponseBody sea un objeto JSON válido
+
 		} else {
 			// Si no es una plantilla y no es JSON, asegurar que ResponseBody sea un string
 			if _, ok := config.ResponseBody.(string); !ok {
-				// Intentar convertir a string si no lo es 
+
+				// Intentar convertir a string si no lo es
 				rbBytes, err := json.Marshal(config.ResponseBody)
 				if err != nil {
 					return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "El 'responseBody' no pudo ser convertido a string para el 'Content-Type' especificado.", "details": err.Error()})
@@ -136,6 +138,7 @@ func ConfigureMock(c *fiber.Ctx) error {
 			}
 		}
 	} else { // config.IsTemplate es true
+
 		// Si es una plantilla, ResponseBody debe ser un string
 		if _, ok := config.ResponseBody.(string); !ok {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Si 'isTemplate' es verdadero, 'responseBody' debe ser un string que contenga la plantilla."})
@@ -153,11 +156,11 @@ func ConfigureMock(c *fiber.Ctx) error {
 
 // getKeys es una función auxiliar para obtener las claves de un mapa de booleanos
 func getKeys(m map[string]bool) []string {
-    keys := make([]string, 0, len(m))
-    for k := range m {
-        keys = append(keys, k)
-    }
-    return keys
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return keys
 }
 
 // GetMockConfigurations maneja la solicitud GET /configure-mock

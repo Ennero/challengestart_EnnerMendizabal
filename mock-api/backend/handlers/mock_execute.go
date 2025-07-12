@@ -15,7 +15,7 @@ import (
 )
 
 // jsonMarshal es una función auxiliar para serializar cualquier interfaz a JSON string.
-// Es necesaria para usar '{{ . | json }}' dentro de las plantillas text/template.
+// necesaria para usar '{{ . | json }}' dentro de text/template.
 func jsonMarshal(v interface{}) (string, error) {
 	a, err := json.Marshal(v)
 	if err != nil {
@@ -36,17 +36,20 @@ func getMapValue(m map[string]string, key string) string {
 // ExecuteMock es el endpoint genérico que intenta hacer coincidir y ejecutar un mock.
 func ExecuteMock(c *fiber.Ctx) error {
 
+	// Extraer información de la solicitud
 	reqPath := c.Path()
 	reqMethod := c.Method()
 	reqQueryParams := c.Queries()
 	log.Printf("Request: Path=%s, Method=%s, QueryParams=%v", reqPath, reqMethod, reqQueryParams)
 
+	// Extraer los headers de la solicitud
 	reqHeaders := make(map[string]string)
 	c.Request().Header.VisitAll(func(key, value []byte) {
 		reqHeaders[strings.ToLower(string(key))] = string(value)
 	})
 	log.Printf("Request Headers: %v", reqHeaders)
 
+	// Extraer el body de la solicitud
 	var reqBody models.RequestBody
 	if len(c.Body()) > 0 && strings.Contains(strings.ToLower(c.Get("Content-Type")), "application/json") {
 		if err := json.Unmarshal(c.Body(), &reqBody); err != nil {
@@ -57,11 +60,12 @@ func ExecuteMock(c *fiber.Ctx) error {
 		}
 	}
 
-	allConfigs := storage.GetAllMockConfigurations() // Ya ordenadas por prioridad
+	// Obtener todas las configuraciones de mocks desde el almacenamiento ya ordenadas por prioridad
+	allConfigs := storage.GetAllMockConfigurations()
 	log.Printf("Total mocks: %d", len(allConfigs))
 
+	// Iterar sobre las configuraciones de mocks para encontrar una coincidencia
 	for _, config := range allConfigs {
-
 		log.Printf("--- Checkeando mock ID: %s ---", config.Id)
 		log.Printf("Mock Config: Path=%s, Method=%s, QueryParams=%v, BodyParams=%v, Headers=%v, IsTemplate=%t",
 			config.Path, config.Method, config.QueryParams, config.BodyParams, config.Headers, config.IsTemplate)
@@ -111,6 +115,8 @@ func ExecuteMock(c *fiber.Ctx) error {
 				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Configuración de mock inválida: el cuerpo de la plantilla no es un string."})
 			}
 
+			// Crear un nuevo template y parsear la plantilla
+			// Usamos jsonMarshal y getMapValue para poder acceder a los valores dentro de la plantilla
 			tmpl, err := template.New("response").Funcs(template.FuncMap{
 				"json":        jsonMarshal,
 				"getMapValue": getMapValue,
@@ -131,6 +137,8 @@ func ExecuteMock(c *fiber.Ctx) error {
 				},
 			}
 
+			// Ejecutar la plantilla con los datos de la solicitud
+			// Usamos un buffer para capturar la salida de la plantilla
 			var buf bytes.Buffer
 			if err := tmpl.Execute(&buf, templateData); err != nil {
 				log.Printf("Error al ejecutar plantilla de mock %s: %v", config.Id, err)
@@ -141,19 +149,21 @@ func ExecuteMock(c *fiber.Ctx) error {
 			// Si el Content-Type es JSON, necesitamos intentar parsearlo de nuevo a interface{}
 			if strings.Contains(strings.ToLower(config.ContentType), "application/json") {
 				var parsedTemplateBody interface{}
+
+				// Intentar deserializar el JSON generado por la plantilla
 				if err := json.Unmarshal(buf.Bytes(), &parsedTemplateBody); err != nil {
 					log.Printf("Advertencia: La salida de la plantilla no es un JSON válido para mock %s: %v", config.Id, err)
-					// Si la salida de la plantilla no es JSON, enviamos como string simple o error
+					// Si la salida de la plantilla no es JSON, enviamos como string simple
 					return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "La plantilla de respuesta JSON generó un JSON inválido.", "details": err.Error()})
 				}
 				finalResponseBody = parsedTemplateBody
 			} else {
-				// Si no es JSON, simplemente lo enviamos como string (ej. text/plain, text/html)
+				// Si no es JSON, simplemente lo enviamos como string
 				return c.Status(config.ResponseStatusCode).SendString(buf.String())
 			}
 		}
 
-		// Enviar la respuesta final (estática o procesada de la plantilla como JSON)
+		// Enviar la respuesta final como JSON
 		return c.Status(config.ResponseStatusCode).JSON(finalResponseBody)
 	}
 
@@ -162,10 +172,7 @@ func ExecuteMock(c *fiber.Ctx) error {
 }
 
 // matchPath verifica si la ruta de la solicitud coincide con la ruta configurada.
-// Podrías expandir esto para manejar patrones de URL más complejos.
 func matchPath(requestPath, configPath string) bool {
-	// Simple comparación directa por ahora.
-	// Para /api/v1/productos/:id, necesitarías lógica más avanzada (ej. regex o path parameters en Fiber).
 	return requestPath == configPath
 }
 
@@ -175,7 +182,6 @@ func matchMethod(requestMethod, configMethod string) bool {
 }
 
 // matchQueryParams verifica si los parámetros de la URL de la solicitud
-// contienen todos los parámetros configurados con sus valores correspondientes.
 func matchQueryParams(requestParams, configParams map[string]string) bool {
 	if len(configParams) == 0 {
 		return true // Si no hay parámetros configurados, cualquier query params coinciden
@@ -189,8 +195,6 @@ func matchQueryParams(requestParams, configParams map[string]string) bool {
 }
 
 // matchBodyParams verifica si los parámetros del body de la solicitud
-// contienen todos los parámetros configurados con sus valores correspondientes.
-// Nota: Esta es una implementación básica y no maneja JSON anidado complejo.
 func matchBodyParams(requestBody, configBody map[string]interface{}) bool {
 	if len(configBody) == 0 {
 		return true
@@ -213,7 +217,6 @@ func matchBodyParams(requestBody, configBody map[string]interface{}) bool {
 }
 
 // matchHeaders verifica si los encabezados de la solicitud
-// contienen todos los encabezados configurados con sus valores correspondientes.
 func matchHeaders(requestHeaders, configHeaders map[string]string) bool {
 	if len(configHeaders) == 0 {
 		return true
@@ -223,6 +226,7 @@ func matchHeaders(requestHeaders, configHeaders map[string]string) bool {
 	}
 
 	for key, value := range configHeaders {
+
 		// Normalizar a minúsculas para la comparación de claves
 		reqVal, ok := requestHeaders[strings.ToLower(key)]
 		if !ok || reqVal != value {

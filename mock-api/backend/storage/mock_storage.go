@@ -16,7 +16,7 @@ const mocksFileName = "config/mocks.json"
 // Variables globales para almacenar las configuraciones de mocks
 var (
 	mockConfigurations = make(map[string]models.MockConfig)
-	mutex             	sync.RWMutex
+	mutex              sync.RWMutex
 )
 
 // InitMockStorage inicializa el almacenamiento y carga las configuraciones existentes desde el archivo.
@@ -46,7 +46,6 @@ func InitMockStorage() {
 	}
 }
 
-
 // saveMocksToFile guarda las configuraciones de mocks en el archivo JSON
 func saveMocksToFile() error {
 	// Serializa el mapa de configuraciones a JSON
@@ -57,7 +56,7 @@ func saveMocksToFile() error {
 	}
 
 	// Escribe el JSON al archivo
-	if err := os.WriteFile(mocksFileName, data, 0644); err != nil { 
+	if err := os.WriteFile(mocksFileName, data, 0644); err != nil {
 		log.Printf("Error al escribir mocks en el archivo '%s': %v", mocksFileName, err)
 		return err
 	}
@@ -65,10 +64,6 @@ func saveMocksToFile() error {
 	log.Printf("Mocks guardados exitosamente en '%s'. Total: %d", mocksFileName, len(mockConfigurations))
 	return nil
 }
-
-
-
-
 
 // AddMockConfig agrega una nueva configuración de mock al almacenamiento.
 func AddMockConfig(config models.MockConfig) error {
@@ -124,4 +119,3 @@ func DeleteMockConfig(id string) bool {
 	}
 	return false
 }
-
