@@ -4,7 +4,6 @@
 
 - [API de Mocks para Servicios REST](#api-de-mocks-para-servicios-rest)
   - [📄 Tabla de Contenidos](#-tabla-de-contenidos)
-- [API de Mocks para Servicios REST](#api-de-mocks-para-servicios-rest-1)
   - [🎯 Objetivos](#-objetivos)
     - [Objetivo General](#objetivo-general)
     - [Objetivos Específicos](#objetivos-específicos)
@@ -33,7 +32,6 @@
 
 ---
 
-# API de Mocks para Servicios REST
 ## 🎯 Objetivos
 
 ### Objetivo General
@@ -394,6 +392,30 @@ A continuación, se demuestra cómo interactuar con la API de mocks utilizando c
     Respuesta dinámica esperada:
     ![img17 sin frontend](imgs/tuto_sin_frontend17.png)
 
+13. **Modificar mock (`POST /greet`):**
+    ```bash
+    curl -X POST -H "Content-Type: application/json" \
+      -d '{
+        "id": "6a84b9d5-74ef-45dd-a158-778363f873d7",
+        "path": "/greet",
+        "method": "GET",
+        "queryParams": {
+          "name": "Juan"
+        },
+        "bodyParams": {},
+        "headers": {},
+        "responseStatusCode": 200,
+        "responseBody": "{\"message\": \"Hola, {{.queryParams.name}}! Bienvenido de nuevo.\"}",
+        "contentType": "application/json",
+        "isTemplate": true
+      }' http://localhost:3000/configure-mock
+    ```
+    Respuesta esperada:
+    ![img18 sin frontend](imgs/tuto_sin_frontend18.png)
+
+    Y debido a que se modifico, ahora responderá con lo siguiente:
+    ![img19 sin frontend](imgs/tuto_sin_frontend19.png)
+
 Esta sección ha mostrado las funcionalidades principales del programa. La API es capaz de manejar un rango mucho más amplio de escenarios de mocking.
 
 ### Uso con Frontend (Interfaz de Usuario Web)
@@ -434,11 +456,12 @@ Partiendo de la interfaz inicial:
     Al confirmar, el mock será eliminado de la lista:
     ![frontend6](imgs/frontend6.png)
 
+
 Esta interfaz simplifica la gestión de mocks sin necesidad de interactuar directamente con la línea de comandos.
 
 ## 🤖 Uso de Herramientas de IA
 
-Esta sección detalla los prompts utilizados con diferentes Large Language Models (LLMs) para acelerar y asistir en el desarrollo de este proyecto.
+Esta sección detalla los prompts utilizados con diferentes Large Language Models (LLMs) para acelerar y asistir en el desarrollo de este proyecto. A cada modelo se le proporcionó contexto y los promps están en orden cronólogico en que fueron utilizados.
 
 ### Gemini 2.5 Flash
 
@@ -455,10 +478,11 @@ Esta sección detalla los prompts utilizados con diferentes Large Language Model
 11. `¿Ahora me podrias mostrar como podria probar este api-mock?`
 12. `Cuando coloco: curl http://localhost:3000/hello me está lanzando el siguiente error: $ curl http://localhost:3000/hello {"error":"Mock no encontrado para la solicitud","method":"GET","path":"/hello"} Es después de ya haber creado el mock, puesto a que todo se encuentra bien en mi json. ¿Cual puede ser el error?`
 13. `Con los cambios funciona todo correctamente menos la parte de la template-echo. Esa al realizarle la prueba que me mencionas: $ curl "http://localhost:3000/template-echo?param1=value1&param2=value2" -H 'X-Custom-Data: MiDato' Me lanza el siguiente error: {"error":"Mock no encontrado para la solicitud","method":"GET","path":"/template-echo"} Si funciona todo, y en el json se encuentra Cual puede ser el error? Entiendo que debe de estar en mi función de ExecuteMock, ¿no?`
-14. `Lo que tengo ahora en el readme está bien? Si no esta totalmente bien o cumpliendo con lo que indica elnunciado dímelo y arreglalo. Mejoralo y logra que se explique de mejor formas. Entregamelo en código .md:`
+14. `Lo que tengo ahora en el readme está bien? Si no esta totalmente bien o cumpliendo con lo que indica elnunciado dímelo y arreglalo. Mejoralo y logra que se explique de mejor formas. Entregamelo en código .md`
 15. `Agregale un índice`
-
-
+16. `Con todas las pruebas que realizamos previamente demostramos que funcionaba todo lo que solicita el enunciado, ¿no? Ahora mi duda es como puedo mejorar la robustez del configure-mock`
+17. `Asi lo dejé con los cambio que me mencionaste. Adicionalmente me pregunto, ¿qué tipos de rutas es capaz de leer la regex? En una págna normal no se usan las consideraciones no validas de este regex, ¿no?`
+18. `Ahora que ya se esto está funcionando correctamente, me gustaria saber como podria implemetnar las pruebas unitarias` 
 
 
 

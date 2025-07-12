@@ -1,4 +1,17 @@
 {
+  "046ec143-ab8f-423d-85bc-ad2147aeb39f": {
+    "id": "046ec143-ab8f-423d-85bc-ad2147aeb39f",
+    "path": "/auth-check",
+    "method": "GET",
+    "queryParams": {},
+    "bodyParams": {},
+    "headers": {
+      "Authorization": "Bearer token123"
+    },
+    "responseStatusCode": 200,
+    "responseBody": "Acceso Autorizado.",
+    "contentType": "text/plain"
+  },
   "2bfe21ac-c24d-4937-8386-3bce8c8ce205": {
     "id": "2bfe21ac-c24d-4937-8386-3bce8c8ce205",
     "path": "/template-echo",
