@@ -92,7 +92,7 @@ Se utiliza la librería `github.com/google/uuid` para asegurar la IDs únicos pa
 
 Se implementa un manejo de errores robusto tanto en el backend (respuestas JSON con códigos de estado HTTP apropiados y mensajes descriptivos) como en el frontend (alertas visuales al usuario), para proporcionar una experiencia de uso clara y consistente.
 
-## 🛠️ Requisitos del Sistema
+## Requisitos del Sistema
 
 ### Hardware
 
@@ -120,7 +120,7 @@ Se implementa un manejo de errores robusto tanto en el backend (respuestas JSON 
 
 -   **npm o Yarn:** Para gestionar las dependencias del frontend.
 
-## 🚀 Instalación y Ejecución
+## Instalación y Ejecución
 
 ### Backend
 
@@ -181,7 +181,121 @@ Adicionalmente, para facilitar el uso del programa, se incluye una interfaz de u
 
 ## Ejemplo de Uso
 
-*(Aquí puedes insertar los ejemplos de `curl` y/o capturas de pantalla de Postman/Insomnia que demuestren cómo usar la API)*
+### Uso sin Frontend
+
+A continuación se presenta un ejemplo de como es que se puede usar el programa si es que no se desea utilizar el frontend:
+
+1. Teniendo levantado así como se mostró previamente, en un consola colocaremos lo siguiente:
+```bash
+curl -X POST \
+  http://localhost:3000/configure-mock \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "path": "/hello",
+    "method": "GET",
+    "responseStatusCode": 200,
+    "contentType": "application/json",
+    "responseBody": {
+        "message": "Hola desde el mock estático!"
+    }
+  }'
+```
+Este mock se encargará de simplemente responder a ```GET /hello``` con el mensaje que se muestra en el JSON
+
+2. Ese comando habrá configurado el primer mock y se mostrara un mensaje de confirmación como el siguiente:
+![img1 sin frontend](imgs/tuto_sin_frontend1.png)
+
+
+3. Adicionalmente se puede observar dentro de la carpeta config, como es que se creó un archivo llamado ```mocks.json``` que contiene la configuración del mock en json
+![img2 sin frontend](imgs/tuto_sin_frontend2.png)
+
+4. Ahora se creará un mock que responderá a ``POST /users`` si el body JSON contiene ``{"username": "testuser"}``:
+```bash
+curl -X POST \
+  http://localhost:3000/configure-mock \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "path": "/users",
+    "method": "POST",
+    "bodyParams": {
+        "username": "testuser"
+    },
+    "responseStatusCode": 201,
+    "contentType": "application/json",
+    "responseBody": {
+        "status": "User created",
+        "id": "user-123",
+        "username": "testuser"
+    }
+  }'
+```
+
+5. Este comando habrá configurado el segundo mock mostrará el siguiente mensaje de confirmación:
+![img3 sin frontend](imgs/tuto_sin_frontend3.png)
+
+6. Ahora configuremos un mock que responda a GET /auth-check si el header ```Authorization``` es  ```Bearer token123```:
+```bash
+curl -X POST \
+  http://localhost:3000/configure-mock \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "path": "/auth-check",
+    "method": "GET",
+    "headers": {
+        "Authorization": "Bearer token123"
+    },
+    "responseStatusCode": 200,
+    "contentType": "text/plain",
+    "responseBody": "Acceso Autorizado."
+  }'
+```
+
+7. Este comando habrá configurado el  tercer mock y mostrará el siguiente mensaje:
+![img4 sin frontend](imgs/tuto_sin_frontend3.png)
+
+8. Ahora configuremos un último mock con plantilla:
+```bash
+curl -X POST \
+  http://localhost:3000/configure-mock \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "path": "/template-echo",
+    "method": "POST",
+    "responseStatusCode": 200,
+    "contentType": "application/json",
+    "isTemplate": true,
+    "priority": 10,
+    "responseBody": "{ \"received_path\": \"{{.Request.Path}}\", \"received_method\": \"{{.Request.Method}}\", \"query_params\": {{.Request.Query | json}}, \"body_data\": {{.Request.Body | json}}, \"custom_header\": \"{{.Request.Headers.x-custom-data}}\" }"
+  }'
+```
+
+9. Al configurarse se tendria el siguiente mensaje de confirmación:
+![img5 sin frontend](imgs/tuto_sin_frontend5.png)
+
+
+10. Ahora para obtener todas las peticiones se coloca:
+```bash
+curl http://localhost:3000/configure-mock
+```
+Se obtiene un arreglo con todos los json configurados:
+![img6 sin frontend](imgs/tuto_sin_frontend6.png)
+
+11. Ahora si se quiere quiere eliminar una configuración se colocaria:
+```bash
+curl -X DELETE http://localhost:3000/configure-mock/TU_ID_DEL_MOCK_AQUI
+```
+
+12. En este caso se eliminará el primer mock que aparece en el arreglo de json, el que tiene id ```2e9a3ed8-d57f-4e85-8d06-40b48252285a``` y aparecerá el siguiente mensaje de confirmación:
+![img7 sin frontend](imgs/tuto_sin_frontend7.png)
+
+13. Y si revisamos el contenido del array, podemos notar que ya no se encuentra el primer elemento que aparecía anteriormente:
+![img8 sin frontend](imgs/tuto_sin_frontend8.png)
+
+14. Ahora si se intenta probar el primer mock que se utilizó, no funcionará correctamente debido a que se eliminó.
+![img9 sin frontend](imgs/tuto_sin_frontend9.png)
+
+
+15. Pero si se quiere probar el mock con parámetro de query, 
 
 ## Uso de herramientas IA
 
@@ -207,8 +321,7 @@ Esta sección detallará los prompts utilizados para acelerar el desarrollo de e
 
 9. Agrega las corrección que me mencionaste y retorname el código .md ya corregido, modificando unicamente lo que me indicaste, menos la parte en donde dictamina que se guarda en memoria, porque lo modifiqué para que se preserven los datos
 
-  
-
+10. En esta sección de código está lo de la Ejecución del MOCK, mi duda es como puedo irlo mejorando para agregarlo lo que solicita el enunciado
 
 ### Claude
 

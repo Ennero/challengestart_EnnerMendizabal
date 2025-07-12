@@ -1,0 +1,15 @@
+{
+  "80dfbea3-c684-4855-99ba-706342365636": {
+    "id": "80dfbea3-c684-4855-99ba-706342365636",
+    "path": "/hello",
+    "method": "GET",
+    "queryParams": {},
+    "bodyParams": {},
+    "headers": {},
+    "responseStatusCode": 200,
+    "responseBody": {
+      "message": "Hola desde el mock est�tico actualizado!"
+    },
+    "contentType": "application/json"
+  }
+}
