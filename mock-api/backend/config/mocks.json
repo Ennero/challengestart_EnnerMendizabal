@@ -12,19 +12,6 @@
     "responseBody": "Acceso Autorizado.",
     "contentType": "text/plain"
   },
-  "2bfe21ac-c24d-4937-8386-3bce8c8ce205": {
-    "id": "2bfe21ac-c24d-4937-8386-3bce8c8ce205",
-    "path": "/template-echo",
-    "method": "POST",
-    "queryParams": {},
-    "bodyParams": {},
-    "headers": {},
-    "responseStatusCode": 200,
-    "responseBody": "{ \"received_path\": \"{{.Request.Path}}\", \"received_method\": \"{{.Request.Method}}\", \"query_params\": {{.Request.Query | json}}, \"body_data\": {{.Request.Body | json}}, \"custom_header\": \"{{getMapValue .Request.Headers \"x-custom-data\"}}\" }",
-    "contentType": "application/json",
-    "isTemplate": true,
-    "priority": 10
-  },
   "42dbb8e7-6443-411e-a577-4203e6f185bc": {
     "id": "42dbb8e7-6443-411e-a577-4203e6f185bc",
     "path": "/auth-check",
@@ -48,10 +35,9 @@
     "bodyParams": {},
     "headers": {},
     "responseStatusCode": 200,
-    "responseBody": {
-      "message": "Hola, Juan! Eres especial."
-    },
-    "contentType": "application/json"
+    "responseBody": "{\"message\": \"Hola, {{.queryParams.name}}! Bienvenido de nuevo.\"}",
+    "contentType": "application/json",
+    "isTemplate": true
   },
   "724f3aea-2090-4b7a-8319-1a14708dd6dd": {
     "id": "724f3aea-2090-4b7a-8319-1a14708dd6dd",
