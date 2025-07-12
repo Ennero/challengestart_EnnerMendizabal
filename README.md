@@ -209,7 +209,29 @@ Este mock se encargará de simplemente responder a ```GET /hello``` con el mensa
 3. Adicionalmente se puede observar dentro de la carpeta config, como es que se creó un archivo llamado ```mocks.json``` que contiene la configuración del mock en json
 ![img2 sin frontend](imgs/tuto_sin_frontend2.png)
 
-4. Ahora se creará un mock que responderá a ``POST /users`` si el body JSON contiene ``{"username": "testuser"}``:
+4. A continuación se crea un mock que reponderá a ```GET /greet?name=Juan``` con un mensaje personalizado:
+```bash
+curl -X POST \
+  http://localhost:3000/configure-mock \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "path": "/greet",
+    "method": "GET",
+    "queryParams": {
+        "name": "Juan"
+    },
+    "responseStatusCode": 200,
+    "contentType": "application/json",
+    "responseBody": {
+        "message": "Hola, Juan! Eres especial."
+    }
+  }'
+```
+
+5. Y esto al ejecutarse, se motará un mensaje que confirmará la creación de esto:
+   ![img10 sin frontend](imgs/tuto_sin_frontend10.png)
+
+6. Ahora se creará un mock que responderá a ``POST /users`` si el body JSON contiene ``{"username": "testuser"}``:
 ```bash
 curl -X POST \
   http://localhost:3000/configure-mock \
@@ -230,10 +252,10 @@ curl -X POST \
   }'
 ```
 
-5. Este comando habrá configurado el segundo mock mostrará el siguiente mensaje de confirmación:
+7. Este comando habrá configurado el segundo mock mostrará el siguiente mensaje de confirmación:
 ![img3 sin frontend](imgs/tuto_sin_frontend3.png)
 
-6. Ahora configuremos un mock que responda a GET /auth-check si el header ```Authorization``` es  ```Bearer token123```:
+8. Ahora configuremos un mock que responda a GET /auth-check si el header ```Authorization``` es  ```Bearer token123```:
 ```bash
 curl -X POST \
   http://localhost:3000/configure-mock \
@@ -250,10 +272,10 @@ curl -X POST \
   }'
 ```
 
-7. Este comando habrá configurado el  tercer mock y mostrará el siguiente mensaje:
+9. Este comando habrá configurado el  tercer mock y mostrará el siguiente mensaje:
 ![img4 sin frontend](imgs/tuto_sin_frontend3.png)
 
-8. Ahora configuremos un último mock con plantilla:
+10. Ahora configuremos un último mock con plantilla:
 ```bash
 curl -X POST \
   http://localhost:3000/configure-mock \
@@ -269,39 +291,126 @@ curl -X POST \
   }'
 ```
 
-9. Al configurarse se tendria el siguiente mensaje de confirmación:
+11. Al configurarse se tendria el siguiente mensaje de confirmación:
 ![img5 sin frontend](imgs/tuto_sin_frontend5.png)
 
 
-10. Ahora para obtener todas las peticiones se coloca:
+12. Ahora para obtener todas las peticiones se coloca:
 ```bash
 curl http://localhost:3000/configure-mock
 ```
 Se obtiene un arreglo con todos los json configurados:
 ![img6 sin frontend](imgs/tuto_sin_frontend6.png)
 
-11. Ahora si se quiere quiere eliminar una configuración se colocaria:
+13. Ahora si se quiere quiere eliminar una configuración se colocaria:
 ```bash
 curl -X DELETE http://localhost:3000/configure-mock/TU_ID_DEL_MOCK_AQUI
 ```
 
-12. En este caso se eliminará el primer mock que aparece en el arreglo de json, el que tiene id ```2e9a3ed8-d57f-4e85-8d06-40b48252285a``` y aparecerá el siguiente mensaje de confirmación:
+14. En este caso se eliminará el primer mock que aparece en el arreglo de json, el que tiene id ```2e9a3ed8-d57f-4e85-8d06-40b48252285a``` y aparecerá el siguiente mensaje de confirmación:
 ![img7 sin frontend](imgs/tuto_sin_frontend7.png)
 
-13. Y si revisamos el contenido del array, podemos notar que ya no se encuentra el primer elemento que aparecía anteriormente:
+15. Y si revisamos el contenido del array, podemos notar que ya no se encuentra el primer elemento que aparecía anteriormente:
 ![img8 sin frontend](imgs/tuto_sin_frontend8.png)
 
-14. Ahora si se intenta probar el primer mock que se utilizó, no funcionará correctamente debido a que se eliminó.
+16. Ahora si se intenta probar el primer mock que se utilizó, no funcionará correctamente debido a que se eliminó.
 ![img9 sin frontend](imgs/tuto_sin_frontend9.png)
 
 
-15. Pero si se quiere probar el mock con parámetro de query, 
+17. Pero si se quiere probar el mock con parámetro de query colocando lo siguiente:
+```bash
+curl "http://localhost:3000/greet?name=Juan"
+```
+Se obtiene lo siguiente:
+![img11 sin frontend](imgs/tuto_sin_frontend11.png)
+
+18. Y si no coincide la petición con el query, dará el siguiente error:
+![img12 sin frontend](imgs/tuto_sin_frontend12.png)
+
+
+19. Ahora para probar el Mock con Body Params, si ingreso lo siguiente:
+```bash
+curl -X POST \
+  http://localhost:3000/users \
+  -H 'Content-Type: application/json' \
+  -d '{"username": "testuser", "email": "test@example.com"}'
+```
+retornará el continido que se muestra a continuación:
+![img13 sin frontend](imgs/tuto_sin_frontend13.png)
+
+20. Si el body no coincide, de el siguiente error que se puede observar:
+![img14 sin frontend](imgs/tuto_sin_frontend14.png)
+
+21. Ahora puede probar el mock que usa headers colocando la siguiente petición:
+```bash
+curl -X GET \
+  http://localhost:3000/auth-check \
+  -H 'Authorization: Bearer token123'
+```
+
+22. Al usar este mock se puede observar que retorna el siguiente mensaje de confirmación 
+![img15 sin frontend](imgs/tuto_sin_frontend15.png)
+
+23. Ahora observando el caso en el que el header falta o es incorrecta, muestra el siguiente mensaje de error:
+![img16 sin frontend](imgs/tuto_sin_frontend16.png)
+
+24. Por último se puede probar el mock con plantilla usando el siguiente código:
+```bash
+curl -X POST "http://localhost:3000/template-echo?param1=value1&param2=value2" \
+     -H 'X-Custom-Data: MiDato' \
+     -H 'Content-Type: application/json' \
+     -d '{}'
+```
+
+25. Y este terminará retornando lo siguiente:
+![img17 sin frontend](imgs/tuto_sin_frontend17.png)
+
+Aquí se intentó mostrar las funcionalidades más importantes del programa, peor es capaz de hacer muchas más cosas.
+
+### Uso con Frontend
+
+Como se mencinó previamente, para facilitar el uso de decidió crear una interfaz de usuario simple que permita una configuración más simple de los mocks. De este modo no se tendria que usar curl para eso.
+Partiendo de lo que se tiene de la demostración previa:
+
+![frontend1](imgs/frontend1.png)
+
+1. Desde esta interfaz se puede manejar todo de una forma más simplificada, en la explicación anterior se eliminó el primer mock, por lo que se agregará a continuación el siguiente mock que se agregó desde curl:
+```bash
+curl -X POST \
+  http://localhost:3000/configure-mock \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "path": "/hello",
+    "method": "GET",
+    "responseStatusCode": 200,
+    "contentType": "application/json",
+    "responseBody": {
+        "message": "Hola desde el mock estático!"
+    }
+  }'
+```
+Pero ahora desde la interfaz de usuario:
+![frontend2](imgs/frontend2.png)
+
+
+2. Después de pulsar el botón de Agregar Mock, se puede observar que efectivamente se agregó el nuebo mock:
+![frontend3](imgs/frontend3.png)
+
+3. Ahora bien, si quiero eliminarlo simplemente se pulsa en el simbolo en la esquina superior izquierda de este para poder eliminarlo:
+![frontend4](imgs/frontend4.png)
+
+4. Al intentar eliminarse aparece un mensaje de confirmación de la acción:
+![frontend5](imgs/frontend5.png)
+
+5. Y por último, al hacer click en aceptar, se elimina el mock configurado.
+![frontend5](imgs/frontend6.png)
+
 
 ## Uso de herramientas IA
 
 Esta sección detallará los prompts utilizados para acelerar el desarrollo de este proyecto dividido por LLM:
 
-### Gemini
+### Gemini 2.5 flash
 
 1.  ¿Qué son los mocks?
 
@@ -323,7 +432,16 @@ Esta sección detallará los prompts utilizados para acelerar el desarrollo de e
 
 10. En esta sección de código está lo de la Ejecución del MOCK, mi duda es como puedo irlo mejorando para agregarlo lo que solicita el enunciado
 
-### Claude
+11. ¿Ahora me podrias mostrar como podria probar este api-mock?
+
+12. Cuando coloco: curl http://localhost:3000/hello me está lanzando el siguiente error: $ curl http://localhost:3000/hello
+{"error":"Mock no encontrado para la solicitud","method":"GET","path":"/hello"} Es después de ya haber creado el mock, puesto a que todo se encuentra bien en mi json. ¿Cual puede ser el error?
+
+13. Con los cambios funciona todo correctamente menos la parte de la template-echo. Esa al realizarle la prueba que me mencionas: $ curl "http://localhost:3000/template-echo?param1=value1&param2=value2" -H 'X-Custom-Data: MiDato' Me lanza el siguiente error: {"error":"Mock no encontrado para la solicitud","method":"GET","path":"/template-echo"} Si funciona todo, y en el json se encuentra Cual puede ser el error? Entiendo que debe de estar en mi función de ExecuteMock, ¿no?
+
+
+
+### Claude Sonnet 4
 
 1.  Haz que el siguiente código de VueJS sea más estético y que, de ser posible, que use lo máximo que se pueda Bootstrap con el CDN.
 
