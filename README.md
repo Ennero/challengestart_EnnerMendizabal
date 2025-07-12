@@ -482,9 +482,6 @@ Esta sección detalla los prompts utilizados con diferentes Large Language Model
 15. `Agregale un índice`
 16. `Con todas las pruebas que realizamos previamente demostramos que funcionaba todo lo que solicita el enunciado, ¿no? Ahora mi duda es como puedo mejorar la robustez del configure-mock`
 17. `Asi lo dejé con los cambio que me mencionaste. Adicionalmente me pregunto, ¿qué tipos de rutas es capaz de leer la regex? En una págna normal no se usan las consideraciones no validas de este regex, ¿no?`
-18. `Ahora que ya se esto está funcionando correctamente, me gustaria saber como podria implemetnar las pruebas unitarias` 
-
-
 
 ### Claude Sonnet 4
 
