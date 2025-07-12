@@ -1,15 +1,15 @@
 {
-  "80dfbea3-c684-4855-99ba-706342365636": {
-    "id": "80dfbea3-c684-4855-99ba-706342365636",
-    "path": "/hello",
-    "method": "GET",
+  "2bfe21ac-c24d-4937-8386-3bce8c8ce205": {
+    "id": "2bfe21ac-c24d-4937-8386-3bce8c8ce205",
+    "path": "/template-echo",
+    "method": "POST",
     "queryParams": {},
     "bodyParams": {},
     "headers": {},
     "responseStatusCode": 200,
-    "responseBody": {
-      "message": "Hola desde el mock est�tico actualizado!"
-    },
-    "contentType": "application/json"
+    "responseBody": "{ \"received_path\": \"{{.Request.Path}}\", \"received_method\": \"{{.Request.Method}}\", \"query_params\": {{.Request.Query | json}}, \"body_data\": {{.Request.Body | json}}, \"custom_header\": \"{{getMapValue .Request.Headers \"x-custom-data\"}}\" }",
+    "contentType": "application/json",
+    "isTemplate": true,
+    "priority": 10
   }
 }
