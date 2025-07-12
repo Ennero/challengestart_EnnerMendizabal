@@ -11,10 +11,9 @@ type MockConfig struct {
 	ResponseStatusCode int               		`json:"responseStatusCode"`
 	ResponseBody       interface{}       		`json:"responseBody"` 
 	ContentType        string            		`json:"contentType"`
-	IsTemplate         bool             		`json:"isTemplate.omitempty"`
-    Priority           int                      `json:"priority,omitempty"`   // <-- Nuevo campo para prioridad	
+	IsTemplate         bool 					`json:"isTemplate,omitempty"` 
+    Priority           int                      `json:"priority,omitempty"` 
 	
-	// Agrega campos para lógica condicional si es necesario
 	ConditionalLogic string `json:"conditionalLogic,omitempty"` // Ejemplo: JS o Go template
 }
 

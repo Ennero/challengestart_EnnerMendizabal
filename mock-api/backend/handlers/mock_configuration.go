@@ -1,6 +1,5 @@
 package handlers
 
-
 import (
 	// "bytes"
 	"encoding/json"
@@ -13,8 +12,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid" // Para generar los IDs únicos
 )
-
-
 
 // ConfigureMock maneja la solicitud POST /configure-mock
 func ConfigureMock(c *fiber.Ctx) error {
@@ -94,7 +91,7 @@ func ConfigureMock(c *fiber.Ctx) error {
 	} else if config.IsTemplate && config.ContentType == "" {
 
 		// Si es una plantilla, pero no se especificó un ContentType, asigna uno por defecto
-		config.ContentType = "application/json" // Asume JSON si es una plantilla (lo más común)
+		config.ContentType = "application/json"
 
 	} else if config.IsTemplate {
 		// Asegurar de que ResponseBody es un string si se marca como plantilla

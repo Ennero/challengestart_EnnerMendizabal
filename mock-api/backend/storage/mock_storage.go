@@ -1,12 +1,13 @@
 package storage
 
 import (
-	"encoding/json" 
-	"log"           
-	"os"            
+	"encoding/json"
+	"log"
+	"os"
+	"sort"
 	"sync"
 
-	"backend/models" 
+	"backend/models"
 )
 
 // Constante con el nmobre del archivo de almacenamiento de mocks
@@ -96,10 +97,18 @@ func GetMockConfigByID(id string) (models.MockConfig, bool) {
 func GetAllMockConfigurations() []models.MockConfig {
 	mutex.RLock()
 	defer mutex.RUnlock()
+
+	// Convertir el mapa a un slice para facilitar la iteración
 	configs := make([]models.MockConfig, 0, len(mockConfigurations))
 	for _, config := range mockConfigurations {
 		configs = append(configs, config)
 	}
+
+	// Ordenar las configuraciones por prioridad antes de devolverlas
+	sort.Slice(configs, func(i, j int) bool {
+		return configs[i].Priority > configs[j].Priority
+	})
+
 	return configs
 }
 
