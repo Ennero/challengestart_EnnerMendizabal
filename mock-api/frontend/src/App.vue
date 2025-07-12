@@ -114,7 +114,7 @@ const showAlert = (message, type) => {
     // Quitar la alerta después de 3 segundos
     setTimeout(() => {
         alertDiv.remove();
-    }, 3000);
+    }, 5000);
 };
 
 // Función para obtener el color según el método HTTP
@@ -123,8 +123,12 @@ const getMethodBadgeClass = (method) => {
     'GET': 'bg-success',
     'POST': 'bg-primary',
     'PUT': 'bg-warning',
+    'PATCH': 'bg-info',
     'DELETE': 'bg-danger',
-    'PATCH': 'bg-info'
+    'HEAD': 'bg-secondary',
+    'OPTIONS': 'bg-dark',
+    'CONNECT': 'bg-light text-dark',
+    'TRACE': 'bg-secondary'
   };
   return methodColors[method] || 'bg-secondary';
 };
@@ -144,38 +148,38 @@ onMounted(fetchMocks);
 
 <template>
   <div id="app">
-    <div class="container py-4">
+    <div class="container-fluid px-4 py-3">
       <!-- Header -->
-      <div class="row mb-4">
+      <div class="row mb-3">
         <div class="col-12 text-center">
-          <h1 class="display-5 fw-bold text-primary mb-3">
+          <h1 class="display-5 fw-bold text-primary mb-2">
             <i class="bi bi-gear-fill me-2"></i>
             Gestor de Mocks API
           </h1>
-          <p class="lead text-muted">Configura y gestiona tus endpoints mock de forma sencilla</p>
+          <p class="lead text-muted mb-0">Configura y gestiona tus endpoints mock de forma sencilla</p>
         </div>
       </div>
 
       <!-- Alert Container -->
-      <div class="alert-container mb-4"></div>
+      <div class="alert-container mb-3"></div>
 
       <!-- Formulario para nuevo mock -->
-      <div class="row justify-content-center mb-4">
-        <div class="col-12 col-lg-8">
+      <div class="row justify-content-center mb-3">
+        <div class="col-12 col-xl-10">
           <div class="card shadow">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-primary text-white py-2">
               <h4 class="card-title mb-0">
                 <i class="bi bi-plus-circle me-2"></i>
                 Configurar Nuevo Mock
               </h4>
             </div>
-            <div class="card-body">
+            <div class="card-body p-3">
               <form @submit.prevent="addMock">
                 <div class="row g-3">
                   
                   <!-- Path y Método en la misma fila -->
                   <div class="col-sm-8">
-                    <label for="path" class="form-label fw-semibold">Path del Endpoint</label>
+                    <label for="path" class="form-label fw-semibold mb-1">Path del Endpoint</label>
                     <div class="input-group">
                       <span class="input-group-text">
                         <i class="bi bi-link-45deg"></i>
@@ -192,7 +196,7 @@ onMounted(fetchMocks);
                   </div>
                   
                   <div class="col-sm-4">
-                    <label for="method" class="form-label fw-semibold">Método HTTP</label>
+                    <label for="method" class="form-label fw-semibold mb-1">Método HTTP</label>
                     <select 
                       id="method"
                       v-model="newMock.method" 
@@ -202,16 +206,20 @@ onMounted(fetchMocks);
                       <option value="GET">GET</option>
                       <option value="POST">POST</option>
                       <option value="PUT">PUT</option>
-                      <option value="DELETE">DELETE</option>
                       <option value="PATCH">PATCH</option>
+                      <option value="DELETE">DELETE</option>
+                      <option value="HEAD">HEAD</option>
+                      <option value="OPTIONS">OPTIONS</option>
+                      <option value="CONNECT">CONNECT</option>
+                      <option value="TRACE">TRACE</option>
                     </select>
                   </div>
                 </div>
 
-                <div class="row g-3 mt-2">
+                <div class="row g-3 mt-1">
                   <!-- Código de estado y Content Type -->
                   <div class="col-sm-6">
-                    <label for="statusCode" class="form-label fw-semibold">Código de Estado</label>
+                    <label for="statusCode" class="form-label fw-semibold mb-1">Código de Estado</label>
                     <div class="input-group">
                       <span class="input-group-text">
                         <i class="bi bi-hash"></i>
@@ -230,7 +238,7 @@ onMounted(fetchMocks);
                   </div>
                   
                   <div class="col-sm-6">
-                    <label for="contentType" class="form-label fw-semibold">Content Type</label>
+                    <label for="contentType" class="form-label fw-semibold mb-1">Content Type</label>
                     <div class="input-group">
                       <span class="input-group-text">
                         <i class="bi bi-file-earmark-code"></i>
@@ -247,23 +255,22 @@ onMounted(fetchMocks);
                   </div>
                 </div>
 
-                <div class="row g-3 mt-2">
-
+                <div class="row g-3 mt-1">
                   <!-- Response Body -->
                   <div class="col-12">
-                    <label for="responseBody" class="form-label fw-semibold">Response Body (JSON)</label>
+                    <label for="responseBody" class="form-label fw-semibold mb-1">Response Body (JSON)</label>
                     <textarea 
                       id="responseBody"
                       v-model="newMock.responseBody" 
                       class="form-control font-monospace" 
-                      rows="5"
+                      rows="4"
                       placeholder='{"message": "Hello World", "data": []}'
                       required
                     ></textarea>
                   </div>
                 </div>
 
-                <div class="row g-3 mt-3">
+                <div class="row g-3 mt-2">
                   <div class="col-12 d-grid">
                     <button type="submit" class="btn btn-primary">
                       <i class="bi bi-plus-circle me-2"></i>
@@ -279,9 +286,9 @@ onMounted(fetchMocks);
 
       <!-- Lista de mocks -->
       <div class="row justify-content-center">
-        <div class="col-12 col-lg-8">
+        <div class="col-12 col-xl-10">
           <div class="card shadow">
-            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+            <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center py-2">
               <h4 class="card-title mb-0">
                 <i class="bi bi-list-ul me-2"></i>
                 Mocks Configurados
@@ -291,47 +298,47 @@ onMounted(fetchMocks);
                 Actualizar
               </button>
             </div>
-            <div class="card-body">
+            <div class="card-body p-3">
               
               <!-- Loading -->
-              <div v-if="loading" class="text-center py-5">
+              <div v-if="loading" class="text-center py-4">
                 <div class="spinner-border text-primary" role="status">
                   <span class="visually-hidden">Cargando...</span>
                 </div>
-                <p class="mt-3 text-muted">Cargando mocks...</p>
+                <p class="mt-2 text-muted mb-0">Cargando mocks...</p>
               </div>
 
               <!-- Error -->
-              <div v-else-if="error" class="alert alert-danger" role="alert">
+              <div v-else-if="error" class="alert alert-danger mb-0" role="alert">
                 <i class="bi bi-exclamation-triangle me-2"></i>
                 {{ error }}
               </div>
 
               <!-- Empty state -->
-              <div v-else-if="mocks.length === 0" class="text-center py-5">
+              <div v-else-if="mocks.length === 0" class="text-center py-4">
                 <i class="bi bi-inbox display-1 text-muted"></i>
-                <h4 class="mt-3 text-muted">No hay mocks configurados</h4>
-                <p class="text-muted">Agrega tu primer mock usando el formulario de arriba</p>
+                <h4 class="mt-2 text-muted">No hay mocks configurados</h4>
+                <p class="text-muted mb-0">Agrega tu primer mock usando el formulario de arriba</p>
               </div>
 
               <!-- Mocks list -->
               <div v-else class="row g-3">
-                <div v-for="mock in mocks" :key="mock.id" class="col-12 col-sm-6">
+                <div v-for="mock in mocks" :key="mock.id" class="col-12 col-md-6 col-lg-4">
                   <div class="card h-100 border-start border-primary border-4">
-                    <div class="card-body d-flex flex-column">
-                      <div class="d-flex justify-content-between align-items-start mb-3">
+                    <div class="card-body p-3 d-flex flex-column">
+                      <div class="d-flex justify-content-between align-items-start mb-2">
                         <div class="flex-grow-1">
-                          <h6 class="card-title mb-2">
+                          <h6 class="card-title mb-1">
                             <span :class="`badge ${getMethodBadgeClass(mock.method)} me-2`">
                               {{ mock.method }}
                             </span>
                           </h6>
-                          <div class="mb-2">
+                          <div class="mb-1">
                             <code class="text-dark small d-block text-break">{{ mock.path }}</code>
                           </div>
-                          <div class="mb-2">
-                            <small class="text-muted">Status:</small>
-                            <span :class="`badge ${getStatusBadgeClass(mock.responseStatusCode)} ms-1`">
+                          <div class="mb-1">
+                            <small class="text-muted me-1">Status:</small>
+                            <span :class="`badge ${getStatusBadgeClass(mock.responseStatusCode)}`">
                               {{ mock.responseStatusCode }}
                             </span>
                           </div>
@@ -350,14 +357,14 @@ onMounted(fetchMocks);
                         <code class="text-info small text-break">{{ mock.id }}</code>
                       </div>
 
-                      <div class="mb-3">
+                      <div class="mb-2">
                         <small class="text-muted d-block mb-1">Content Type:</small>
                         <span class="badge bg-light text-dark small">{{ mock.contentType }}</span>
                       </div>
 
                       <div class="flex-grow-1">
-                        <small class="text-muted d-block mb-2">Response Body:</small>
-                        <pre class="bg-light p-2 rounded border overflow-auto" style="max-height: 120px; font-size: 0.75rem;"><code>{{ typeof mock.responseBody === 'string' ? mock.responseBody : JSON.stringify(mock.responseBody, null, 2) }}</code></pre>
+                        <small class="text-muted d-block mb-1">Response Body:</small>
+                        <pre class="bg-light p-2 rounded border overflow-auto compact-pre" style="max-height: 100px; font-size: 0.7rem; line-height: 1.2;"><code>{{ typeof mock.responseBody === 'string' ? mock.responseBody : JSON.stringify(mock.responseBody, null, 2) }}</code></pre>
                       </div>
                     </div>
                   </div>
@@ -372,6 +379,8 @@ onMounted(fetchMocks);
 </template>
 
 <style scoped>
+@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css');
+
 .card {
   transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
@@ -380,5 +389,20 @@ onMounted(fetchMocks);
   transform: translateY(-2px);
 }
 
-@import url('https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css');
+.compact-pre {
+  margin-bottom: 0;
+}
+
+/* Reducir espacio entre elementos */
+.form-label {
+  margin-bottom: 0.25rem;
+}
+
+/* Optimizar para pantallas más grandes */
+@media (min-width: 1400px) {
+  .container-fluid {
+    max-width: 1600px;
+    margin: 0 auto;
+  }
+}
 </style>
