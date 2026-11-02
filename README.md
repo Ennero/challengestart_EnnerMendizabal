@@ -1,4 +1,4 @@
-<div align="center">
+﻿<div align="center">
 
 # 🚀 REST API Mocking Service & Dynamic Server
 
@@ -13,9 +13,9 @@
 
 </div>
 
-> [!IMPORTANT]
-> ### 🏆 Proyecto Seleccionado entre los Ganadores — Concurso de Programación TIGO
-> Este proyecto fue desarrollado y presentado como solución técnica en el concurso oficial de programación y tecnología organizado por **TIGO**, donde fue galardonado y seleccionado **entre los proyectos ganadores**, destacando por su robustez en el diseño de APIs de alto rendimiento con **Go (Fiber)**, concurrencia, simulación de respuestas dinámicas en tiempo real y arquitectura desacoplada.
+> [!NOTE]
+> ### 📱 Proyecto Realizado para Concurso de Programación TIGO
+> Este proyecto fue desarrollado y presentado como solución técnica para un concurso oficial de programación y tecnología organizado por **TIGO**, implementando una arquitectura de simulación de APIs de alto rendimiento con **Go (Fiber)**, concurrencia y respuestas dinámicas en tiempo real.
 
 ---
 
