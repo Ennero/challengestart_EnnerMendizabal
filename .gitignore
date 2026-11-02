@@ -1,0 +1,24 @@
+# Go Binaries & Builds
+mock-api/backend/bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+mock-api/backend/server
+
+# Node / React Frontend
+mock-api/frontend/node_modules/
+mock-api/frontend/dist/
+npm-debug.log*
+yarn-debug.log*
+
+# Environment & IDE
+.env
+.env.local
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
