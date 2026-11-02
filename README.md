@@ -9,8 +9,13 @@
 [![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
+[![TIGO Winner](https://img.shields.io/badge/%F0%9F%8F%86%20Proyecto%20Ganador-Concurso%20TIGO-00377B?style=for-the-badge&logo=tigo&logoColor=white)](https://github.com/Ennero/challengestart_EnnerMendizabal)
 
 </div>
+
+> [!IMPORTANT]
+> ### 🏆 Proyecto Seleccionado entre los Ganadores — Concurso de Programación TIGO
+> Este proyecto fue desarrollado y presentado como solución técnica en el concurso oficial de programación y tecnología organizado por **TIGO**, donde fue galardonado y seleccionado **entre los proyectos ganadores**, destacando por su robustez en el diseño de APIs de alto rendimiento con **Go (Fiber)**, concurrencia, simulación de respuestas dinámicas en tiempo real y arquitectura desacoplada.
 
 ---
 
