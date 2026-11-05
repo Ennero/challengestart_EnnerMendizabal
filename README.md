@@ -1,27 +1,26 @@
-﻿<div align="center">
+<div align="center">
 
 # 🚀 REST API Mocking Service & Dynamic Server
 
 **Servicio de simulación de APIs REST con enrutamiento dinámico, persistencia configurable y dashboard web interactivo**
 
-[![Go Version](https://img.shields.io/badge/Go-1.22+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev/)
+[![Go Version](https://img.shields.io/badge/Go-1.24.5+-00ADD8?style=for-the-badge&logo=go&logoColor=white)](https://go.dev/)
 [![Fiber](https://img.shields.io/badge/Fiber-v2-00ACD7?style=for-the-badge&logo=go&logoColor=white)](https://gofiber.io/)
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev/)
+[![Vue](https://img.shields.io/badge/Vue-3-4FC08D?style=for-the-badge&logo=vuedotjs&logoColor=white)](https://vuejs.org/)
 [![Vite](https://img.shields.io/badge/Vite-5.x-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge)](https://opensource.org/licenses/MIT)
-[![TIGO Winner](https://img.shields.io/badge/%F0%9F%8F%86%20Proyecto%20Ganador-Concurso%20TIGO-00377B?style=for-the-badge&logo=tigo&logoColor=white)](https://github.com/Ennero/challengestart_EnnerMendizabal)
 
 </div>
 
 > [!NOTE]
-> ### 📱 Proyecto Realizado para Concurso de Programación TIGO
+> ### Proyecto realizado para un concurso de programación de TIGO
 > Este proyecto fue desarrollado y presentado como solución técnica para un concurso oficial de programación y tecnología organizado por **TIGO**, implementando una arquitectura de simulación de APIs de alto rendimiento con **Go (Fiber)**, concurrencia y respuestas dinámicas en tiempo real.
 
 ---
 
 ## 📄 Tabla de Contenidos
 
-- [API de Mocks para Servicios REST](#api-de-mocks-para-servicios-rest)
+- [REST API Mocking Service & Dynamic Server](#-rest-api-mocking-service--dynamic-server)
   - [📄 Tabla de Contenidos](#-tabla-de-contenidos)
   - [🎯 Objetivos](#-objetivos)
     - [Objetivo General](#objetivo-general)
